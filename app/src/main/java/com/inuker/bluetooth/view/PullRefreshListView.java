@@ -1,7 +1,6 @@
 package com.inuker.bluetooth.view;
 
 import android.content.Context;
-import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -9,6 +8,8 @@ import android.view.ViewConfiguration;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
+
+import androidx.core.view.MotionEventCompat;
 
 import com.inuker.bluetooth.R;
 

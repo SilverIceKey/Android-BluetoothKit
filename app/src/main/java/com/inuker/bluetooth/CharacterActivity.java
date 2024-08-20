@@ -1,5 +1,10 @@
 package com.inuker.bluetooth;
 
+import static com.inuker.bluetooth.library.Constants.GATT_DEF_BLE_MTU_SIZE;
+import static com.inuker.bluetooth.library.Constants.GATT_MAX_MTU_SIZE;
+import static com.inuker.bluetooth.library.Constants.REQUEST_SUCCESS;
+import static com.inuker.bluetooth.library.Constants.STATUS_DISCONNECTED;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.inuker.bluetooth.library.connect.listener.BleConnectStatusListener;
 import com.inuker.bluetooth.library.connect.response.BleMtuResponse;
@@ -18,8 +22,6 @@ import com.inuker.bluetooth.library.connect.response.BleUnnotifyResponse;
 import com.inuker.bluetooth.library.connect.response.BleWriteResponse;
 import com.inuker.bluetooth.library.utils.BluetoothLog;
 import com.inuker.bluetooth.library.utils.ByteUtils;
-
-import static com.inuker.bluetooth.library.Constants.*;
 
 import java.util.UUID;
 
@@ -150,33 +152,36 @@ public class CharacterActivity extends Activity implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.read:
-                ClientManager.getClient().read(mMac, mService, mCharacter, mReadRsp);
-                break;
-            case R.id.write:
-                ClientManager.getClient().write(mMac, mService, mCharacter,
-                        ByteUtils.stringToBytes(mEtInput.getText().toString()), mWriteRsp);
-                break;
-            case R.id.notify:
-                ClientManager.getClient().notify(mMac, mService, mCharacter, mNotifyRsp);
-                break;
-            case R.id.unnotify:
-                ClientManager.getClient().unnotify(mMac, mService, mCharacter, mUnnotifyRsp);
-                break;
-            case R.id.btn_request_mtu:
-                String mtuStr = mEtInputMtu.getText().toString();
-                if (TextUtils.isEmpty(mtuStr)) {
-                    CommonUtils.toast("MTU不能为空");
-                    return;
-                }
-                int mtu = Integer.parseInt(mtuStr);
-                if (mtu < GATT_DEF_BLE_MTU_SIZE || mtu > GATT_MAX_MTU_SIZE) {
-                    CommonUtils.toast("MTU不不在范围内");
-                    return;
-                }
-                ClientManager.getClient().requestMtu(mMac, mtu, mMtuResponse);
-                break;
+        if (v.getId() == R.id.read) {
+            ClientManager.getClient().read(mMac, mService, mCharacter, mReadRsp);
+            return;
+        }
+        if (v.getId() == R.id.write) {
+            ClientManager.getClient().write(mMac, mService, mCharacter,
+                    ByteUtils.stringToBytes(mEtInput.getText().toString()), mWriteRsp);
+            return;
+        }
+        if (v.getId() == R.id.notify) {
+            ClientManager.getClient().notify(mMac, mService, mCharacter, mNotifyRsp);
+            return;
+        }
+        if (v.getId() == R.id.unnotify) {
+            ClientManager.getClient().unnotify(mMac, mService, mCharacter, mUnnotifyRsp);
+            return;
+        }
+        if (v.getId() == R.id.btn_request_mtu) {
+            String mtuStr = mEtInputMtu.getText().toString();
+            if (TextUtils.isEmpty(mtuStr)) {
+                CommonUtils.toast("MTU不能为空");
+                return;
+            }
+            int mtu = Integer.parseInt(mtuStr);
+            if (mtu < GATT_DEF_BLE_MTU_SIZE || mtu > GATT_MAX_MTU_SIZE) {
+                CommonUtils.toast("MTU不不在范围内");
+                return;
+            }
+            ClientManager.getClient().requestMtu(mMac, mtu, mMtuResponse);
+            return;
         }
     }
 
