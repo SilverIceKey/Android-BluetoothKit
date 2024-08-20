@@ -1,16 +1,14 @@
 plugins {
     id 'com.android.library'
-    id 'maven-publish'
 }
 
 android {
     namespace 'com.inuker.bluetooth.library'
     compileSdk 34
 
-    resourcePrefix "bluetoothkit_"
-
     defaultConfig {
         minSdk 24
+        targetSdk 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -21,18 +19,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = project.findProperty("GROUP_ID") as String // 使用 GROUP_ID 属性
-            artifactId = "BluetoothKit"
-            version = project.findProperty("VERSION") as String // 使用 VERSION_NAME 属性
-            afterEvaluate {
-//                from components["release"]
-            }
-        }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
